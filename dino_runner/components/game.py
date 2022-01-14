@@ -20,6 +20,7 @@ class Game:
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.points = 0
+        self.points_final = 0
         self.running = True
         self.death_count = 0
 
@@ -69,11 +70,12 @@ class Game:
 
     def score(self):
         self.points += 1
+        self.points_final = self.points
 
         if self.points % 100 == 0:
             self.game_speed += 1
 
-        text, text_rect = text_utils.get_score_element(self.points)
+        text, text_rect = text_utils.get_score_element_beginning(self.points)
         self.screen.blit(text, text_rect)
 
     def print_menu_elements(self):
@@ -81,17 +83,20 @@ class Game:
         half_screen_width = SCREEN_WIDTH // 2
 
         if self.death_count == 0:
+            self.screen.blit(RUNNING[0], (half_screen_width - 40, half_screen_height - 140))
             text, text_rect = text_utils.get_centered_message('Press any key to start')
             self.screen.blit(text, text_rect)
-            self.screen.blit(RUNNING[0], (half_screen_width - 20, half_screen_height - 140))
 
         if self.death_count >= 1:
+            self.screen.blit(RUNNING[0], (half_screen_width - 40, half_screen_height - 140))
             text, text_rect = text_utils.get_centered_message('Press any key to start')
-            text, text_rect = text_utils.get_centered_message('Deaths: ' + str(self.death_count))
             self.screen.blit(text, text_rect)
-            self.screen.blit(RUNNING[0], (half_screen_width - 20, half_screen_height - 140))
+            text, text_rect = text_utils.get_score_element_final(self.points_final)
+            self.screen.blit(text, text_rect)
+            text, text_rect = text_utils.get_deaths_element_final(self.death_count)
+            self.screen.blit(text, text_rect)
+            self.points = 0
             self.running
-
 
     def show_menu(self):
        self.running = True
@@ -115,4 +120,5 @@ class Game:
                 exit()
             if event.type == pygame.KEYDOWN:
                 self.run()
+
 
