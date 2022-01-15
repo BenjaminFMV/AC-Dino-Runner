@@ -2,6 +2,7 @@ import pygame
 
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.powerup_manager import PowerUpManager
+from dino_runner.components.lifes.heaths import Heaths
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, RUNNING
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components import text_utils
@@ -21,6 +22,7 @@ class Game:
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
+        self.heaths = Heaths()
         self.points = 0
         self.points_final = 0
         self.running = True
@@ -60,6 +62,7 @@ class Game:
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.power_up_manager.draw(self.screen)
+        self.heaths.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
