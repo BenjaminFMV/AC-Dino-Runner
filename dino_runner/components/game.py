@@ -1,6 +1,7 @@
 import pygame
 
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.power_ups.powerup_manager import PowerUpManager
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, RUNNING
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components import text_utils
@@ -19,6 +20,7 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+        self.power_up_manager = PowerUpManager()
         self.points = 0
         self.points_final = 0
         self.running = True
@@ -49,6 +51,7 @@ class Game:
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
+        self.power_up_manager.update(self.game_speed, self.player)
 
     def draw(self):
         self.score()
@@ -56,6 +59,7 @@ class Game:
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
@@ -77,6 +81,7 @@ class Game:
 
         text, text_rect = text_utils.get_score_element_beginning(self.points)
         self.screen.blit(text, text_rect)
+        self.player.check_invincibility(self.screen)
 
     def print_menu_elements(self):
         half_screen_height = SCREEN_HEIGHT // 2
@@ -120,5 +125,3 @@ class Game:
                 exit()
             if event.type == pygame.KEYDOWN:
                 self.run()
-
-
